@@ -1,3 +1,18 @@
+function formatPersonnummer(personnummer) {
+    // Ta bort allt utom siffror
+    personnummer = personnummer.replace(/\D/g, '');
+    
+    // Lägg till århundradeprefix om det behövs
+    if (personnummer.length === 10) {
+        const yearPart = parseInt(personnummer.slice(0, 2), 10);
+        const currentYear = new Date().getFullYear() % 100;
+        const prefix = yearPart >= currentYear ? "19" : "20";
+        personnummer = prefix + personnummer;
+    }
+
+    return personnummer;
+}
+
 function isValidPersonnummer(personnummer) {
     // Ta bort allt utom siffror
     personnummer = personnummer.replace(/\D/g, '');
