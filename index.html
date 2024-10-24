@@ -3,32 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Personnummer Validering</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="header">
-        <a href="https://github.com/epatnor/pnrfix" target="_blank" rel="noopener noreferrer" id="logo-link">
-            <img src="pnrfix_logo2.png" alt="PNRFIX Logo" class="logo">
-        </a>
-        <button id="themeToggle" class="theme-toggle">
-            <i id="themeIcon" class="fas fa-sun"></i>
-        </button>
-    </div>
-    
-    <div id="output">
-        <!-- Resultat loggas här -->
-    </div>
+    <div id="output"></div>
+
+    <button id="themeToggle" class="theme-toggle">
+        <i id="themeIcon" class="fas fa-moon"></i>
+    </button>
 
     <script src="personnummerValidator.js"></script>
     <script src="themeSwitcher.js"></script>
     <script>
         // Funktion för att hämta URL-parameter
-        const getQueryParam = param => new URLSearchParams(window.location.search).get(param);
-    
+        function getQueryParam(param) {
+            return new URLSearchParams(window.location.search).get(param);
+        }
+
         // Funktion för att logga meddelanden
-        const logMessage = message => document.getElementById("output").innerHTML += `<p>${message}</p>`;
-    
+        function logMessage(message) {
+            document.getElementById("output").innerHTML += `<p>${message}</p>`;
+        }
+
         // Hämta och validera personnummer
         const personnummer = getQueryParam("personnummer");
         if (!personnummer) {
@@ -42,7 +39,7 @@
         
             logMessage(`Inkommande personnummer: ${personnummer} ${status}`);
             if (isValid) {
-                logMessage(`Utgående personnummer: ${formattedNumber}`);
+                logMessage(`Åtgående personnummer: ${formattedNumber}`);
             }
         }
     </script>
