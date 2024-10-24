@@ -11,7 +11,7 @@
     <div class="container">
         <h1 class="title">Personnummer Konverterare</h1>
         <button id="themeToggle">Växla tema</button>
-        <div id="log" class="log"></div>
+        <div id="log" class="log"></div> <!-- Loggfönstret -->
     </div>
 
     <script>
@@ -20,7 +20,7 @@
             let personnummer = urlParams.get('personnummer');
 
             if (!personnummer) {
-                logEntry('Tomt värde', null, false);
+                logEntry('Tomt värde', null, false, 'Personnumret får inte vara tomt.');
                 return;
             }
 
@@ -40,11 +40,9 @@
                 if (personnummer.length === 12) {
                     if (isValidControlDigits(personnummer)) {
                         const formateratPersonnummer = personnummer.slice(0, 8) + "-" + personnummer.slice(8); // Format YYYYMMDD-XXXX
-                        
-                        // Visa det formaterade personnumret på sidan
-                        const outputDiv = document.createElement('p');
-                        outputDiv.textContent = `Detta personnummer kommer skickas vidare: ${formateratPersonnummer}`;
-                        document.body.appendChild(outputDiv);
+
+                        // Logga det formaterade personnumret i loggfönstret
+                        logEntry(originalPersonnummer, formateratPersonnummer, true);
                     } else {
                         logEntry(originalPersonnummer, null, false, 'Ogiltiga kontrollsiffror.');
                     }
@@ -52,9 +50,6 @@
             } else {
                 logEntry(originalPersonnummer, null, false, 'Ogiltigt personnummer.');
             }
-
-            // Logga händelsen
-            logEntry(originalPersonnummer, null, isValid);
         };
 
         function isValidControlDigits(personnummer) {
