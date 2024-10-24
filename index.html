@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personnummer Växel med Logg</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .log {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #fafafa;
+            max-height: 300px;
+            overflow-y: scroll;
+        }
+        .log-entry {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        .log-entry.valid {
+            color: green;
+        }
+        .log-entry.invalid {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Personnummer Växel</h1>
+        <p>Här kan du se loggen för alla personnummerförfrågningar, både korrekta och felaktiga format:</p>
+        <div class="log" id="log"></div>
+    </div>
+
+    <script>
+        function logEntry(original, formatted, isValid) {
+            const logDiv = document.getElementById('log');
+            const entryDiv = document.createElement('div');
+            entryDiv.className = 'log-entry ' + (isValid ? 'valid' : 'invalid');
+            entryDiv.innerHTML = `
+                <strong>Original:</strong> ${original} <br>
+                <strong>Formaterat:</strong> ${formatted ? formatted : 'Ogiltigt personnummer'}
+            `;
+            logDiv.appendChild(entryDiv);
+        }
+
+        window.onload = function() {
+            // Hämta personnummer från URL-parametern
+            const urlParams = new URLSearchParams(window.location.search);
+            let personnummer = urlParams.get('personnummer');
+
+            if (!personnummer) {
+                logEntry('Tomt värde', null, false);
+                return;
+            }
+
+            const originalPersonnummer = personnummer; // Spara för loggning
+            personnummer = personnummer.replace(/\D/g, '');
+
+            let isValid = true;
+            if (personnummer.length === 10) {
+                // Lägg till prefix (t.ex. 19) för tvåsiffrigt århundrade
+                personnummer = "19" + personnummer;
+            }
+
+            if (personnummer.length !== 12) {
+                isValid = false;
+            }
+
+            let formateratPersonnummer = null;
+            if (isValid) {
+                // Lägg till streck innan de sista fyra siffrorna
+                formateratPersonnummer = personnummer.slice(0, 8) + "-" + personnummer.slice(8);
+            }
+
+            // Logga händelsen
+            logEntry(originalPersonnummer, formateratPersonnummer, isValid);
+
+            if (isValid) {
+                // Skicka vidare det formaterade personnumret till en annan webbadress
+                let targetUrl = "https://exempel.se/mottagare";  // Byt ut mot den faktiska måladressen
+                window.location.href = `${targetUrl}?personnummer=${formateratPersonnummer}`;
+            }
+        };
+    </script>
+</body>
+</html>
