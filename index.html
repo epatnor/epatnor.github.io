@@ -32,14 +32,18 @@
 
                 // Kontrollera längd och format
                 if (personnummer.length === 10) {
-                    // 10 siffror: Lägg till 20xx eller 19xx baserat på ålder
                     const yearPrefix = personnummer.substring(0, 2) < "20" ? "20" : "19"; // Bestäm årtalet
                     personnummer = yearPrefix + personnummer; // Lägger till 20 eller 19
                 }
-                
+
                 // Kontrollera att personnumret nu är 12 siffror
                 if (personnummer.length === 12) {
-                    formateratPersonnummer = personnummer.slice(0, 8) + "-" + personnummer.slice(8); // Format YYYYMMDD-XXXX
+                    if (isValidControlDigits(personnummer)) {
+                        formateratPersonnummer = personnummer.slice(0, 8) + "-" + personnummer.slice(8); // Format YYYYMMDD-XXXX
+                    } else {
+                        logEntry(originalPersonnummer, null, false);
+                        return;
+                    }
                 }
                 
                 // Visa det formaterade personnumret på sidan
@@ -53,6 +57,22 @@
             // Logga händelsen
             logEntry(originalPersonnummer, formateratPersonnummer, isValid);
         };
+
+        function isValidControlDigits(personnummer) {
+            let sum = 0;
+            for (let i = 0; i < personnummer.length - 1; i++) { // Exkludera sista siffran
+                let digit = parseInt(personnummer[i]);
+                if (i % 2 === 1) { // Dubbel varje andra siffra
+                    digit *= 2;
+                    if (digit > 9) {
+                        digit -= 9; // Subtrahera 9 om resultatet är större än 9
+                    }
+                }
+                sum += digit;
+            }
+            // Kontrollera om summan är delbar med 10
+            return (sum + parseInt(personnummer[11])) % 10 === 0; // Inkludera kontrollsiffran
+        }
 
         function logEntry(original, formatted, success) {
             const logDiv = document.getElementById('log');
