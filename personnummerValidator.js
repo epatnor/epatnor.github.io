@@ -1,65 +1,57 @@
 function formatPersonnummer(personnummer) {
-    // Ta bort allt utom siffror
-    personnummer = personnummer.replace(/\D/g, '');
-    
+    // Ta bort allt utom siffror och bindestreck
+    personnummer = personnummer.replace(/[^\d-]/g, '');
+
+    // Ta bort bindestreck om det finns för att normalisera input
+    const normalizedNumber = personnummer.replace(/-/g, '');
+
+    // Bestäm om vi behöver lägga till ett sekelprefix
     let prefix = '';
-    if (personnummer.length === 10) {
-        const yearPart = parseInt(personnummer.slice(0, 2), 10);
+    if (normalizedNumber.length === 10) {
         const currentYear = new Date().getFullYear() % 100;
-        prefix = yearPart >= currentYear ? "19" : "20";
-        personnummer = prefix + personnummer;
-    } else if (personnummer.length === 12) {
-        prefix = personnummer.slice(0, 2);
-        // Ingen ny prefix behöver läggas till, men vi behåller logiken för att hålla strukturen
+        const yearPart = parseInt(normalizedNumber.slice(0, 2), 10);
+        prefix = yearPart <= currentYear ? "20" : "19";
+    } else if (normalizedNumber.length === 12) {
+        prefix = normalizedNumber.slice(0, 2);
     } else {
-        // Om längden är felaktig returnera som det är
-        return personnummer;
+        return personnummer; // Returnerar originalinput om det har fel längd
     }
 
-    // Lägg till bindestreck om det är 12 siffror
-    return personnummer.slice(0, 8) + '-' + personnummer.slice(8);
+    // Bygg ihop personnumret med prefix
+    const fullNumber = prefix + normalizedNumber.slice(prefix ? 2 : 0);
+
+    // Formatera till önskat format
+    return `${fullNumber.slice(0, 4)}${fullNumber.slice(4, 6)}${fullNumber.slice(6, 8)}-${fullNumber.slice(8)}`;
 }
 
 function isValidPersonnummer(personnummer) {
-    // Tar bort bindestreck för validering
-    personnummer = personnummer.replace(/-/g, '');
+    personnummer = personnummer.replace(/-/g, ''); // Ta bort bindestreck för validering
 
-    // Kontrollera längd (ska vara 10 eller 12 siffror)
+    // Kontrollera om längden är korrekt
     if (personnummer.length !== 10 && personnummer.length !== 12) {
         return false;
     }
 
-    // Om det är 10 siffror, formatera till 12 siffror för validering
-    if (personnummer.length === 10) {
-        personnummer = formatPersonnummer(personnummer.replace(/-/g, ''));
-        if (personnummer.length !== 13) return false; // Om formateringen misslyckades
-    }
-
-    // Dela upp i datumdelar
-    const year = parseInt(personnummer.slice(0, 4), 10);
-    const month = parseInt(personnummer.slice(4, 6), 10);
-    const day = parseInt(personnummer.slice(6, 8), 10);
-
-    // Kontrollera månad och dag
-    if (month < 1 || month > 12 || day < 1 || day > 31) {
+    // Dela upp personnumret för validering
+    const fullNumber = personnummer.length === 10 ? formatPersonnummer(personnummer.replace(/-/g, '')) : personnummer;
+    const year = parseInt(fullNumber.slice(0, 4), 10);
+    const month = parseInt(fullNumber.slice(4, 6), 10) - 1; // Månad är 0-indexed i Date-objekt
+    const day = parseInt(fullNumber.slice(6, 8), 10);
+    
+    // Kontrollera datumets giltighet
+    const date = new Date(year, month, day);
+    if (date.getFullYear() !== year || date.getMonth() !== month || date.getDate() !== day) {
         return false;
     }
 
-    // Kontrollera giltigt datum
-    const date = new Date(year, month - 1, day);
-    if (isNaN(date.getTime()) || date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+    // Kontrollera att de sista fyra siffrorna är siffror och att personnumret har korrekt längd
+    const lastFour = fullNumber.slice(-4);
+    if (!/^\d{4}$/.test(lastFour) || fullNumber.length !== 12) {
         return false;
     }
 
-    // Kontrollera att de sista fyra siffrorna är fyra stycken
-    const lastFourDigits = personnummer.slice(8, 12);
-    if (lastFourDigits.length !== 4 || isNaN(lastFourDigits)) {
-        return false;
-    }
-
-    // Om inga tidigare kontroller misslyckades, är personnumret giltigt
-    return true;
+    return true; // Om inga tidigare kontroller misslyckades
 }
 
-// Exportera funktionerna om detta är ett modul
+// Exportera funktionerna
 module.exports = { formatPersonnummer, isValidPersonnummer };
