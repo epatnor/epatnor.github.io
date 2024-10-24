@@ -46,10 +46,15 @@
         
             if (!isValidLength) return;
         
-            const year = personnummer.slice(0, 2);
+            const cleanNumber = personnummer.replace(/-/g, ''); // Tar bort eventuella bindestreck
+            const year = cleanNumber.slice(0, 2);
             const century = (year > 24) ? '19' : '20'; // Enkel bestämning av århundrade
-            const formattedNumber = `${century}${personnummer.replace('-', '')}`;
+            const formattedNumber = `${century}${cleanNumber.slice(0, -4)}-${cleanNumber.slice(-4)}`;
+        
             logMessage(`Utgående reformaterat personnummer: ${formattedNumber}`);
+            
+            // Förberedelse för att skicka formattedNumber
+            // sendToURL(formattedNumber); // Kommenterar detta för att visa var du skulle skicka numret
         }
 
         // Hämta personnummer och formatera/send
