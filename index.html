@@ -3,93 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personnummer Konverterare</title>
-    <link rel="stylesheet" href="style.css"> <!-- Länka till din CSS-fil -->
-    <script src="personnummerValidator.js" defer></script> <!-- Ladda den externa JavaScript-filen -->
+    <title>Personnummer Validator</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1 class="title">Personnummer Konverterare</h1>
-        <button id="themeToggle">Växla tema</button>
-        <div id="log" class="log"></div> <!-- Loggfönstret -->
+    <h1>Personnummer Validerare</h1>
+
+    <div id="output">
+        <!-- Resultat loggas här -->
     </div>
 
+    <script src="personnummerValidator.js"></script>
     <script>
-        window.onload = function() {
+        // Funktion för att hämta URL-parameter
+        function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
-            let personnummer = urlParams.get('personnummer');
+            return urlParams.get(param);
+        }
 
-            if (!personnummer) {
-                logEntry('Tomt värde', null, false, 'Personnumret får inte vara tomt.');
-                return;
-            }
+        // Loggmeddelande
+        function logMessage(message) {
+            const outputDiv = document.getElementById("output");
+            const p = document.createElement("p");
+            p.textContent = message;
+            outputDiv.appendChild(p);
+        }
 
-            const originalPersonnummer = personnummer; // Spara för loggning
+        // Hämta personnummer från URL
+        const personnummer = getQueryParam("personnummer");
 
-            // Formattera personnumret med "19" eller "20" som prefix
-            personnummer = formatPersonnummer(personnummer);
-            const formattedPersonnummer = personnummer.slice(0, 8) + "-" + personnummer.slice(8); // Format YYYYMMDD-XXXX
+        if (!personnummer) {
+            // Om inget personnummer skickas, skriv ett snällt meddelande
+            logMessage("Inget personnummer tillhandahölls. Ange ett personnummer för validering.");
+        } else {
+            // Formatera personnumret och kör validering
+            const formateratPersonnummer = formatPersonnummer(personnummer);
+            const isValid = isValidPersonnummer(formateratPersonnummer);
 
-            const isValid = isValidPersonnummer(personnummer); // Anropa den separata valideringsfunktionen
-
-            // Logga det konverterade personnumret oavsett om det är giltigt eller ej
             if (isValid) {
-                // Kontrollera längd och format
-                if (personnummer.length === 12) {
-                    if (isValidControlDigits(personnummer)) {
-                        // Logga det formaterade personnumret i loggfönstret
-                        logEntry(originalPersonnummer, formattedPersonnummer, true);
-                    } else {
-                        logEntry(originalPersonnummer, formattedPersonnummer, false, 'Ogiltiga kontrollsiffror.');
-                    }
-                }
+                logMessage(`Framgång: ${personnummer} -> ${formateratPersonnummer}`);
+                logMessage(`Detta personnummer kommer skickas vidare: ${formateratPersonnummer}`);
             } else {
-                logEntry(originalPersonnummer, formattedPersonnummer, false, 'Ogiltigt personnummer.');
+                logMessage(`Misslyckande: ${personnummer} - Ogiltigt personnummer.`);
             }
-        };
-
-        function formatPersonnummer(personnummer) {
-            // Ta bort allt utom siffror
-            personnummer = personnummer.replace(/\D/g, '');
-
-            // Om det är 10 siffror, lägg till "19" eller "20" som prefix
-            if (personnummer.length === 10) {
-                const yearPart = parseInt(personnummer.slice(0, 2), 10);
-                const currentYear = new Date().getFullYear();
-                const prefix = yearPart >= (currentYear % 100) ? "19" : "20"; // Välj prefix baserat på året
-                personnummer = prefix + personnummer; // Lägger till prefix
-            }
-
-            return personnummer; // Returera det formaterade personnumret
         }
-
-        function isValidControlDigits(personnummer) {
-            let sum = 0;
-            for (let i = 0; i < personnummer.length - 1; i++) { // Exkludera sista siffran
-                let digit = parseInt(personnummer[i]);
-                if (i % 2 === 1) { // Dubbel varje andra siffra
-                    digit *= 2;
-                    if (digit > 9) {
-                        digit -= 9; // Subtrahera 9 om resultatet är större än 9
-                    }
-                }
-                sum += digit;
-            }
-            // Kontrollera om summan är delbar med 10
-            return (sum + parseInt(personnummer[11])) % 10 === 0; // Inkludera kontrollsiffran
-        }
-
-        function logEntry(original, formatted, success, errorMessage = null) {
-            const logDiv = document.getElementById('log');
-            const logMessage = success
-                ? `<p class="success">Framgång: ${original} -> ${formatted}</p>`
-                : `<p class="error">Misslyckande: ${original} -> ${formatted} - ${errorMessage || 'Ogiltigt personnummer'}</p>`;
-            logDiv.innerHTML += logMessage;
-        }
-
-        document.getElementById('themeToggle').addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-        });
     </script>
 </body>
 </html>
