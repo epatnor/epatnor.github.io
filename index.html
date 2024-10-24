@@ -36,16 +36,14 @@
             document.getElementById("output").innerHTML += `<p>${message}</p>`;
         }
 
-        // Format personnummer
+        // Format personnummer, inkluderat bindestreck
         function formatPersonnummer(personnummer) {
-            personnummer = personnummer.replace(/\D/g, '');
-            if (personnummer.length === 10) {
-                const yearPart = parseInt(personnummer.slice(0, 2), 10);
-                const currentYear = new Date().getFullYear() % 100;
-                const prefix = yearPart >= currentYear ? "19" : "20";
-                personnummer = prefix + personnummer;
+            // Din befintliga formateringslogik...
+            if (personnummer.length === 12) {
+                return personnummer.slice(0, 8) + '-' + personnummer.slice(8);
+            } else {
+                return personnummer;
             }
-            return personnummer;
         }
 
         // Hämta personnummer från URL och validera
@@ -54,7 +52,8 @@
             logMessage("Inget personnummer tillhandahölls. Ange ett personnummer för validering.");
         } else {
             const formateratPersonnummer = formatPersonnummer(personnummer);
-            const isValid = isValidPersonnummer(formateratPersonnummer);
+            const forValidation = formateratPersonnummer.replace(/-/g, ''); // Tar bort bindestreck för validering
+            const isValid = isValidPersonnummer(forValidation);
 
             if (isValid) {
                 logMessage(`Framgång: ${personnummer} -> ${formateratPersonnummer}`);
