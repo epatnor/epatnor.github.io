@@ -28,31 +28,23 @@
 
             // Formattera personnumret med "19" eller "20" som prefix
             personnummer = formatPersonnummer(personnummer);
+            const formattedPersonnummer = personnummer.slice(0, 8) + "-" + personnummer.slice(8); // Format YYYYMMDD-XXXX
 
             const isValid = isValidPersonnummer(personnummer); // Anropa den separata valideringsfunktionen
 
+            // Logga det konverterade personnumret oavsett om det är giltigt eller ej
             if (isValid) {
-                // Ta bort allt utom siffror
-                personnummer = personnummer.replace(/\D/g, ''); // Rensa bort icke-siffror
-
                 // Kontrollera längd och format
-                if (personnummer.length === 10) {
-                    personnummer = "19" + personnummer; // Lägger till 19 för 10-siffrigt nummer
-                }
-
-                // Kontrollera att personnumret nu är 12 siffror
                 if (personnummer.length === 12) {
                     if (isValidControlDigits(personnummer)) {
-                        const formateratPersonnummer = personnummer.slice(0, 8) + "-" + personnummer.slice(8); // Format YYYYMMDD-XXXX
-
                         // Logga det formaterade personnumret i loggfönstret
-                        logEntry(originalPersonnummer, formateratPersonnummer, true);
+                        logEntry(originalPersonnummer, formattedPersonnummer, true);
                     } else {
-                        logEntry(originalPersonnummer, null, false, 'Ogiltiga kontrollsiffror.');
+                        logEntry(originalPersonnummer, formattedPersonnummer, false, 'Ogiltiga kontrollsiffror.');
                     }
                 }
             } else {
-                logEntry(originalPersonnummer, null, false, 'Ogiltigt personnummer.');
+                logEntry(originalPersonnummer, formattedPersonnummer, false, 'Ogiltigt personnummer.');
             }
         };
 
@@ -91,7 +83,7 @@
             const logDiv = document.getElementById('log');
             const logMessage = success
                 ? `<p class="success">Framgång: ${original} -> ${formatted}</p>`
-                : `<p class="error">Misslyckande: ${original} - ${errorMessage || 'Ogiltigt personnummer'}</p>`;
+                : `<p class="error">Misslyckande: ${original} -> ${formatted} - ${errorMessage || 'Ogiltigt personnummer'}</p>`;
             logDiv.innerHTML += logMessage;
         }
 
