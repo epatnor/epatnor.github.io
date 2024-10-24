@@ -2,7 +2,7 @@ function isValidPersonnummer(personnummer) {
     // Ta bort allt utom siffror
     personnummer = personnummer.replace(/\D/g, '');
 
-    // Kontrollera längd
+    // Kontrollera längd (ska vara 10 eller 12 siffror)
     if (personnummer.length !== 10 && personnummer.length !== 12) {
         return false;
     }
@@ -31,10 +31,19 @@ function isValidPersonnummer(personnummer) {
         return false; // Ogiltigt datum
     }
 
-    // Kontrollera kontrollsiffrorna
-    return isValidControlDigits(personnummer); // Anropar kontrollsifferkontroll
+    // Kontrollera att de sista fyra siffrorna är fyra stycken (ingen kontrollsifferberäkning)
+    const lastFourDigits = personnummer.slice(8);
+    if (lastFourDigits.length !== 4 || isNaN(lastFourDigits)) {
+        return false; // Ogiltigt format på de sista fyra siffrorna
+    }
+
+    // Tidigare kontrollsifferfunktion är bortkommenterad
+    // return isValidControlDigits(personnummer);
+
+    return true; // Om alla kontroller är godkända
 }
 
+/*
 function isValidControlDigits(personnummer) {
     let sum = 0;
     const length = personnummer.length;
@@ -53,3 +62,5 @@ function isValidControlDigits(personnummer) {
     // Kontrollera om summan är delbar med 10
     return (sum + parseInt(personnummer[length - 1])) % 10 === 0; // Inkludera kontrollsiffran
 }
+*/
+
