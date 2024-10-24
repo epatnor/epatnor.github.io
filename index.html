@@ -38,21 +38,20 @@
         }
 
         function formatAndSendPersonnummer(personnummer) {
-            // Tar bort eventuella bindestreck för enklare bearbetning
             const cleanNumber = personnummer.replace(/-/g, '');
             
-            // Extrahera århundrade, år, månad och dag
             const centuryYear = cleanNumber.slice(0, 2);
             const month = parseInt(cleanNumber.slice(2, 4), 10);
             const day = parseInt(cleanNumber.slice(4, 6), 10);
+            const lastFourDigits = cleanNumber.slice(-4);
         
-            // Validering av århundrade, månad och dag
             const isValidCentury = centuryYear === '19' || centuryYear === '20';
             const isValidMonth = month > 0 && month <= 12;
             const isValidDay = day > 0 && day <= 31;
+            const hasFourDigitsAtEnd = lastFourDigits.length === 4;
         
             const isValidLength = cleanNumber.length === 10 || cleanNumber.length === 12;
-            const isPersonnummerValid = isValidCentury && isValidMonth && isValidDay && isValidLength;
+            const isPersonnummerValid = isValidCentury && isValidMonth && isValidDay && isValidLength && hasFourDigitsAtEnd;
             const statusText = isPersonnummerValid ? 'OK' : 'FEL';
             const statusColor = isPersonnummerValid ? 'green' : 'red';
             
@@ -65,7 +64,7 @@
         
             logMessage(`Utgående reformaterat personnummer: ${formattedNumberWithDash}`);
             
-            // Skicka formattedNumberWithDash till din URL om så önskas
+            // Här kan du lägga till logiken för att skicka formattedNumberWithDash till en URL
             // sendToURL(formattedNumberWithDash);
         }
 
