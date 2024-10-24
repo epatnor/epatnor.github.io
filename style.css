@@ -1,0 +1,107 @@
+:root {
+    --background-light: #f4f4f4;
+    --background-dark: #1e1e1e;
+    --foreground-light: #fff;
+    --foreground-dark: #333;
+    --text-light: #000;
+    --text-dark: #fff;
+    --log-border-light: #ccc;
+    --log-border-dark: #555;
+    --accent-light: #007BFF;
+    --accent-dark: #4f91ff;
+}
+
+body.light {
+    background-color: var(--background-light);
+    color: var(--text-light);
+}
+
+body.dark {
+    background-color: var(--background-dark);
+    color: var(--text-dark);
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--foreground-light);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+body.dark .container {
+    background-color: var(--foreground-dark);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    text-align: center;
+    font-size: 2rem;
+}
+
+.theme-switch {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.theme-switch button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: inherit;
+}
+
+.log {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid var(--log-border-light);
+    background-color: var(--foreground-light);
+    max-height: 300px;
+    overflow-y: scroll;
+    border-radius: 5px;
+}
+
+body.dark .log {
+    border-color: var(--log-border-dark);
+    background-color: var(--foreground-dark);
+}
+
+.log-entry {
+    padding: 10px;
+    border-bottom: 1px solid var(--log-border-light);
+}
+
+body.dark .log-entry {
+    border-bottom-color: var(--log-border-dark);
+}
+
+.log-entry:last-child {
+    border-bottom: none;
+}
+
+.log-entry.valid {
+    color: var(--accent-light);
+}
+
+.log-entry.invalid {
+    color: red;
+}
+
+body.dark .log-entry.valid {
+    color: var(--accent-dark);
+}
+
+.log-entry.invalid i {
+    color: red;
+}
+
+.log-entry.valid i {
+    color: var(--accent-light);
+}
+
+body.dark .log-entry.valid i {
+    color: var(--accent-dark);
+}
