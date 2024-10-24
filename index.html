@@ -24,28 +24,28 @@
 
     <script src="personnummerValidator.js"></script>
     <script src="themeSwitcher.js"></script>
-<script>
-    // Funktion för att hämta URL-parameter
-    const getQueryParam = param => new URLSearchParams(window.location.search).get(param);
-
-    // Funktion för att logga meddelanden
-    const logMessage = message => document.getElementById("output").innerHTML += `<p>${message}</p>`;
-
-    // Hämta och validera personnummer
-    const personnummer = getQueryParam("personnummer");
-    if (!personnummer) {
-        logMessage("Inget personnummer tillhandahölls. Ange ett personnummer för validering.");
-    } else {
-        const formattedNumber = formatPersonnummer(personnummer);
-        const isValid = isValidPersonnummer(formattedNumber.replace(/-/g, ''));
-        
-        if (isValid) {
-            logMessage(`Framgång: ${personnummer} -> ${formattedNumber}`);
-            logMessage(`Detta personnummer kommer skickas vidare: ${formattedNumber}`);
+    <script>
+        // Funktion för att hämta URL-parameter
+        const getQueryParam = param => new URLSearchParams(window.location.search).get(param);
+    
+        // Funktion för att logga meddelanden
+        const logMessage = message => document.getElementById("output").innerHTML += `<p>${message}</p>`;
+    
+        // Hämta och validera personnummer
+        const personnummer = getQueryParam("personnummer");
+        if (!personnummer) {
+            logMessage("Inget personnummer tillhandahölls. Ange ett personnummer för validering.");
         } else {
-            logMessage(`Misslyckande: ${personnummer} - Ogiltigt personnummer.`);
+            const formattedNumber = formatPersonnummer(personnummer);
+            const isValid = isValidPersonnummer(formattedNumber.replace(/-/g, ''));
+            
+            if (isValid) {
+                logMessage(`Framgång: ${personnummer} -> ${formattedNumber}`);
+                logMessage(`Detta personnummer kommer skickas vidare: ${formattedNumber}`);
+            } else {
+                logMessage(`Misslyckande: ${personnummer} - Ogiltigt personnummer.`);
+            }
         }
-    }
-</script>
+    </script>
 </body>
 </html>
