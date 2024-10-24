@@ -25,6 +25,10 @@
             }
 
             const originalPersonnummer = personnummer; // Spara för loggning
+
+            // Formattera personnumret med "19" eller "20" som prefix
+            personnummer = formatPersonnummer(personnummer);
+
             const isValid = isValidPersonnummer(personnummer); // Anropa den separata valideringsfunktionen
 
             if (isValid) {
@@ -51,6 +55,21 @@
                 logEntry(originalPersonnummer, null, false, 'Ogiltigt personnummer.');
             }
         };
+
+        function formatPersonnummer(personnummer) {
+            // Ta bort allt utom siffror
+            personnummer = personnummer.replace(/\D/g, '');
+
+            // Om det är 10 siffror, lägg till "19" eller "20" som prefix
+            if (personnummer.length === 10) {
+                const yearPart = parseInt(personnummer.slice(0, 2), 10);
+                const currentYear = new Date().getFullYear();
+                const prefix = yearPart >= (currentYear % 100) ? "19" : "20"; // Välj prefix baserat på året
+                personnummer = prefix + personnummer; // Lägger till prefix
+            }
+
+            return personnummer; // Returera det formaterade personnumret
+        }
 
         function isValidControlDigits(personnummer) {
             let sum = 0;
