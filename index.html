@@ -4,55 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personnummer Konverterare</title>
-    
-    <!-- External CSS -->
-    <link rel="stylesheet" href="style.css">
-    
-    <!-- Font Awesome for Icons -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css"> <!-- Om du har en extern CSS-fil -->
+    <script src="personnummerValidator.js" defer></script> <!-- Ladda den externa JavaScript-filen -->
 </head>
-<body class="light">
-    <div class="container">
-        <div class="theme-switch">
-            <button id="theme-toggle"><i class="fas fa-sun"></i></button>
-        </div>
-        <h1><i class="fas fa-sync-alt"></i>Personnummer Konverterare</h1>
-        <h2>"En enkel lösning för att formatera personnummer."</h2>
-        <p></p>
-        <p>Här kan du se loggen för alla personnummerförfrågningar, både korrekta och felaktiga format:</p>
-        <div class="log" id="log"></div>
-    </div>
+<body>
+    <h1>Personnummer Konverterare</h1>
+    <div id="log"></div>
 
     <script>
-        // Toggle light and dark theme
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const bodyElement = document.body;
-
-        themeToggleBtn.addEventListener('click', () => {
-            if (bodyElement.classList.contains('light')) {
-                bodyElement.classList.replace('light', 'dark');
-                themeToggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
-            } else {
-                bodyElement.classList.replace('dark', 'light');
-                themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
-            }
-        });
-
-        // Log entries function
-        function logEntry(original, formatted, isValid) {
-            const logDiv = document.getElementById('log');
-            const entryDiv = document.createElement('div');
-            entryDiv.className = 'log-entry ' + (isValid ? 'valid' : 'invalid');
-            entryDiv.innerHTML = `
-                <i class="fas ${isValid ? 'fa-check-circle' : 'fa-times-circle'}"></i>
-                <strong>Original:</strong> ${original} <br>
-                <strong>Formaterat:</strong> ${formatted ? formatted : 'Ogiltigt personnummer'}
-            `;
-            logDiv.appendChild(entryDiv);
-        }
-
         window.onload = function() {
-            // Hämta personnummer från URL-parametern
             const urlParams = new URLSearchParams(window.location.search);
             let personnummer = urlParams.get('personnummer');
 
@@ -62,34 +22,32 @@
             }
 
             const originalPersonnummer = personnummer; // Spara för loggning
-            personnummer = personnummer.replace(/\D/g, '');
-
-            let isValid = true;
-            if (personnummer.length === 10) {
-                // Lägg till prefix (t.ex. 19) för tvåsiffrigt århundrade
-                personnummer = "19" + personnummer;
-            }
-
-            if (personnummer.length !== 12) {
-                isValid = false;
-            }
+            const isValid = isValidPersonnummer(personnummer); // Anropa den separata funktionen
 
             let formateratPersonnummer = null;
+
             if (isValid) {
-                // Lägg till streck innan de sista fyra siffrorna
-                formateratPersonnummer = personnummer.slice(0, 8) + "-" + personnummer.slice(8);
+                // Formatera personnumret
+                formateratPersonnummer = personnummer.replace(/\D/g, '').slice(0, 8) + "-" + personnummer.replace(/\D/g, '').slice(8);
+                // Visa det formaterade personnumret på sidan
+                const outputDiv = document.createElement('p');
+                outputDiv.textContent = `Detta personnummer kommer skickas vidare: ${formateratPersonnummer}`;
+                document.body.appendChild(outputDiv);
+            } else {
+                logEntry(originalPersonnummer, null, false);
             }
 
             // Logga händelsen
             logEntry(originalPersonnummer, formateratPersonnummer, isValid);
-
-            if (isValid) {
-                // Visa det formaterade personnumret på sidan istället för att skicka det
-                const outputDiv = document.createElement('p');
-                outputDiv.textContent = `Detta personnummer kommer skickas vidare: ${formateratPersonnummer}`;
-                document.body.appendChild(outputDiv);
-            }
         };
+
+        function logEntry(original, formatted, success) {
+            const logDiv = document.getElementById('log');
+            const logMessage = success
+                ? `Framgång: ${original} -> ${formatted}`
+                : `Misslyckande: ${original} - Ogiltigt personnummer`;
+            logDiv.innerHTML += `<p>${logMessage}</p>`;
+        }
     </script>
 </body>
 </html>
