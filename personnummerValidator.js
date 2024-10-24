@@ -7,9 +7,12 @@ function isValidPersonnummer(personnummer) {
         return false;
     }
 
-    // Om det är 10 siffror, lägg till 19 som prefix för att få 12 siffror
+    // Om det är 10 siffror, lägg till 19 eller 20 som prefix för att få 12 siffror
     if (personnummer.length === 10) {
-        personnummer = "19" + personnummer;
+        const yearPart = parseInt(personnummer.slice(0, 2), 10);
+        const currentYear = new Date().getFullYear();
+        const prefix = yearPart >= (currentYear % 100) ? "19" : "20"; // Välj prefix baserat på året
+        personnummer = prefix + personnummer; // Lägger till prefix
     }
 
     // Dela upp i datumdelar
@@ -28,13 +31,15 @@ function isValidPersonnummer(personnummer) {
         return false; // Ogiltigt datum
     }
 
-    // Kontrollera kontrollsiffror
-    return isValidControlDigits(personnummer); // Anropa kontrollsifferkontroll
+    // Kontrollera kontrollsiffrorna
+    return isValidControlDigits(personnummer); // Anropar kontrollsifferkontroll
 }
 
 function isValidControlDigits(personnummer) {
     let sum = 0;
-    for (let i = 0; i < personnummer.length - 1; i++) { // Exkludera sista siffran
+    const length = personnummer.length;
+
+    for (let i = 0; i < length - 1; i++) { // Exkludera sista siffran
         let digit = parseInt(personnummer[i]);
         if (i % 2 === 1) { // Dubbel varje andra siffra
             digit *= 2;
@@ -44,6 +49,7 @@ function isValidControlDigits(personnummer) {
         }
         sum += digit;
     }
+    
     // Kontrollera om summan är delbar med 10
-    return (sum + parseInt(personnummer[11])) % 10 === 0; // Inkludera kontrollsiffran
+    return (sum + parseInt(personnummer[length - 1])) % 10 === 0; // Inkludera kontrollsiffran
 }
