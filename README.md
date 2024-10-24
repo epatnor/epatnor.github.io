@@ -4,6 +4,29 @@ It includes a GUI that displays a log of all incoming requests, including the or
 
 It's a basic HTML page with JavaScript that displays the logs on the same page. This way, users can see both the input they provided and how it was processed, whether valid or invalid.
 
+Förklaring av URL-komponenterna:
+Bas-URL: https://epatnor.github.io/index.html
+
+Detta är den grundläggande adressen till din webbplats. Eftersom GitHub Pages använder index.html som standardfil, måste du inkludera det i URL
+om det inte finns någon standardinställning för filnamn.
+Frågeparameter: ?personnummer=
+
+Frågetecknet (?) indikerar början av en frågeparameter i URL
+. Det följs av nyckeln personnummer, som är den parameter du kommer att använda i din kod för att hämta värdet.
+Värde: 1234567890
+
+Detta är det faktiska personnumret som du vill skicka till din webbplats. Du kan ersätta 1234567890 med det personnummer som du vill testa. Se till att det är i korrekt format (till exempel 10 eller 12 siffror).
+Exempel på olika format:
+Korrekt format:
+https://epatnor.github.io/index.html?personnummer=1980123456 (12 siffror)
+https://epatnor.github.io/index.html?personnummer=8012345678 (10 siffror, utan århundrade)
+Felaktigt format:
+https://epatnor.github.io/index.html?personnummer=abcde (innehar bokstäver)
+https://epatnor.github.io/index.html?personnummer=12345 (för få siffror)
+Testa URL:en:
+Du kan klistra in URL
+direkt i webbläsarens adressfält och trycka på Enter. Den ska då omdirigera dig till loggsidan där du kan se resultatet av personnummerkonverteringen, oavsett om det är korrekt eller felaktigt.
+
 Förklaring:
 Log Entry Function (logEntry):
 
@@ -37,3 +60,12 @@ Deployment and Testing:
 Use one of the free hosting services like GitHub Pages, Netlify, or Vercel from the previous suggestions to deploy this page.
 Make sure to update the targetUrl to the desired receiving endpoint for further processing once the personnummer has been validated.
 This should give a clear view of what's happening with each request!
+
+How to Implement:
+Create the CSS file: Save the style.css code in a new file called style.css in the same directory as your index.html.
+Link to the CSS file: Make sure you have the <link rel="stylesheet" href="style.css"> in the <head> of your HTML file to ensure the styles are applied.
+
+Advantages:
+Cleaner HTML: The HTML now only contains the structure and minimal inline styling.
+Easier Updates: If you want to update or expand the design, you can simply modify the style.css file without touching the HTML.
+Scalability: If your project grows or you add more pages, you can easily apply the same styles by linking the style.css file across multiple pages.
