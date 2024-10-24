@@ -1,31 +1,31 @@
 <!DOCTYPE html>
-<html lang="sv">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personnummer Validering</title>
-    <link rel="stylesheet" href="style.css"> <!-- Här länkas style.css -->
-</head>
-<body>
-    <!-- Din befintliga HTML-kod här -->
-    <header class="header"> <!-- Lägg märke till att jag lagt till klassen 'header' -->
-        <a href="https://github.com/epatnor/pnrfix" id="logo-link">
-            <img src="pnrfix_logo2.png" alt="PnrFix Logga" id="logoImg" class="logo">
-        </a>
+    <html lang="sv">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Personnummer Validering</title>
+        <link rel="stylesheet" href="style.css"> <!-- Här länkas style.css -->
+    </head>
+    <body>
+        <!-- Din befintliga HTML-kod här -->
+        <header class="header"> <!-- Lägg märke till att jag lagt till klassen 'header' -->
+            <a href="https://github.com/epatnor/pnrfix" id="logo-link">
+                <img src="pnrfix_logo2.png" alt="PnrFix Logga" id="logoImg" class="logo">
+            </a>
+            <button id="themeToggle" class="theme-toggle">
+                <i id="themeIcon" class="fas fa-moon"></i>
+            </button>
+        </header>
+        
+        <div id="output"></div>
+    
         <button id="themeToggle" class="theme-toggle">
             <i id="themeIcon" class="fas fa-moon"></i>
         </button>
-    </header>
     
-    <div id="output"></div>
-
-    <button id="themeToggle" class="theme-toggle">
-        <i id="themeIcon" class="fas fa-moon"></i>
-    </button>
-
-    <script src="personnummerValidator.js"></script>
-    <script src="themeSwitcher.js"></script>
-    <script>
+        <script src="personnummerValidator.js"></script>
+        <script src="themeSwitcher.js"></script>
+        <script>
         // Funktion för att hämta URL-parameter
         function getQueryParam(param) {
             return new URLSearchParams(window.location.search).get(param);
