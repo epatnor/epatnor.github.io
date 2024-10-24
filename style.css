@@ -62,7 +62,7 @@ h1 {
 }
 
 /* Mörkt tema */
-.dark-theme {
+.dark-mode {
     --bg-color: #121212;
     --text-color: #e0e0e0;
     --header-color: #2a2a2a;
