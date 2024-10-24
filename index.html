@@ -25,16 +25,15 @@
             }
 
             const originalPersonnummer = personnummer; // Spara för loggning
-            const validationResult = validatePersonnummer(personnummer); // Anropa den separata valideringsfunktionen
+            const isValid = isValidPersonnummer(personnummer); // Anropa den separata valideringsfunktionen
 
-            if (validationResult.isValid) {
+            if (isValid) {
                 // Ta bort allt utom siffror
                 personnummer = personnummer.replace(/\D/g, ''); // Rensa bort icke-siffror
 
                 // Kontrollera längd och format
                 if (personnummer.length === 10) {
-                    const yearPrefix = personnummer.substring(0, 2) < "20" ? "20" : "19"; // Bestäm årtalet
-                    personnummer = yearPrefix + personnummer; // Lägger till 20 eller 19
+                    personnummer = "19" + personnummer; // Lägger till 19 för 10-siffrigt nummer
                 }
 
                 // Kontrollera att personnumret nu är 12 siffror
@@ -51,41 +50,12 @@
                     }
                 }
             } else {
-                logEntry(originalPersonnummer, null, false, validationResult.errorMessage);
+                logEntry(originalPersonnummer, null, false, 'Ogiltigt personnummer.');
             }
 
             // Logga händelsen
-            logEntry(originalPersonnummer, null, validationResult.isValid);
+            logEntry(originalPersonnummer, null, isValid);
         };
-
-        function validatePersonnummer(personnummer) {
-            // Ta bort allt utom siffror
-            personnummer = personnummer.replace(/\D/g, ''); // Rensa bort icke-siffror
-            const errorMessage = [];
-
-            // Kontrollera längd
-            if (personnummer.length !== 10 && personnummer.length !== 12) {
-                return { isValid: false, errorMessage: 'Personnumret måste vara 10 eller 12 siffror.' };
-            }
-
-            // Om det är 10 siffror, lägg till årtalsprefix
-            if (personnummer.length === 10) {
-                const yearPrefix = personnummer.substring(0, 2) < "20" ? "20" : "19";
-                personnummer = yearPrefix + personnummer; // Lägger till 20 eller 19
-            }
-
-            // Kontrollera giltigt datum
-            const year = parseInt(personnummer.slice(0, 4), 10);
-            const month = parseInt(personnummer.slice(4, 6), 10);
-            const day = parseInt(personnummer.slice(6, 8), 10);
-
-            const date = new Date(year, month - 1, day); // Skapa datumobjekt
-            if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
-                return { isValid: false, errorMessage: 'Ogiltigt datum i personnumret.' };
-            }
-
-            return { isValid: true };
-        }
 
         function isValidControlDigits(personnummer) {
             let sum = 0;
