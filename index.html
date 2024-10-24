@@ -35,13 +35,14 @@
             logMessage("Inget personnummer tillhandahölls. Ange ett personnummer för validering.");
         } else {
             const formattedNumber = formatPersonnummer(personnummer);
-            const isValid = isValidPersonnummer(formattedNumber.replace(/-/g, ''));
+            const forValidation = formattedNumber.replace(/-/g, ''); // Tar bort bindestreck för validering
+            const isValid = isValidPersonnummer(forValidation);
             
+            const status = isValid ? `<span style="color:green">OK</span>` : `<span style="color:red">FEL</span>`;
+        
+            logMessage(`Inkommande personnummer: ${personnummer} ${status}`);
             if (isValid) {
-                logMessage(`Framgång: ${personnummer} -> ${formattedNumber}`);
-                logMessage(`Detta personnummer kommer skickas vidare: ${formattedNumber}`);
-            } else {
-                logMessage(`Misslyckande: ${personnummer} - Ogiltigt personnummer.`);
+                logMessage(`Åtgående personnummer: ${formattedNumber}`);
             }
         }
     </script>
