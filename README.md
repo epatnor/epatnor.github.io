@@ -1,3 +1,6 @@
+![image](https://github.com/user-attachments/assets/2a83385c-712b-4675-a9dd-c875766d263a)
+
+
 Webbplatsen tar emot ett personnummer via URL och formaterar det genom att lägga till ett streck före de sista fyra siffrorna om numret är giltigt. Sidan visar en logg över alla inkommande förfrågningar med både ursprungliga och formaterade personnummer samt om de är giltiga eller ogiltiga.
 
 Användargränssnittet är en enkel HTML-sida med JavaScript som dynamiskt uppdaterar loggen på samma sida. Detta gör det möjligt för användare att se hur deras input hanterats, oavsett om det är korrekt eller felaktigt formaterat.
