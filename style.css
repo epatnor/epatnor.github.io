@@ -88,3 +88,20 @@ a:focus, button:focus {
 button, input, select, textarea {
     transition: background-color var(--transition-speed) ease, border var(--transition-speed) ease, color var(--transition-speed) ease;
 }
+
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+    color: var(--text-color);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+}
