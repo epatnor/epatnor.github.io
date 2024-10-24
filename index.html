@@ -4,60 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personnummer Växel med Logg</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            border-radius: 8px;
-        }
-        h1 {
-            text-align: center;
-        }
-        .log {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            background-color: #fafafa;
-            max-height: 300px;
-            overflow-y: scroll;
-        }
-        .log-entry {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-        .log-entry:last-child {
-            border-bottom: none;
-        }
-        .log-entry.valid {
-            color: green;
-        }
-        .log-entry.invalid {
-            color: red;
-        }
-    </style>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Font Awesome for Icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="light">
     <div class="container">
-        <h1>Personnummer Växel</h1>
+        <div class="theme-switch">
+            <button id="theme-toggle"><i class="fas fa-sun"></i></button>
+        </div>
+        <h1><i class="fas fa-sync-alt"></i> Personnummer Växel</h1>
         <p>Här kan du se loggen för alla personnummerförfrågningar, både korrekta och felaktiga format:</p>
         <div class="log" id="log"></div>
     </div>
 
     <script>
+        // Toggle light and dark theme
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const bodyElement = document.body;
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (bodyElement.classList.contains('light')) {
+                bodyElement.classList.replace('light', 'dark');
+                themeToggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+            } else {
+                bodyElement.classList.replace('dark', 'light');
+                themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+        });
+
+        // Log entries function
         function logEntry(original, formatted, isValid) {
             const logDiv = document.getElementById('log');
             const entryDiv = document.createElement('div');
             entryDiv.className = 'log-entry ' + (isValid ? 'valid' : 'invalid');
             entryDiv.innerHTML = `
+                <i class="fas ${isValid ? 'fa-check-circle' : 'fa-times-circle'}"></i>
                 <strong>Original:</strong> ${original} <br>
                 <strong>Formaterat:</strong> ${formatted ? formatted : 'Ogiltigt personnummer'}
             `;
