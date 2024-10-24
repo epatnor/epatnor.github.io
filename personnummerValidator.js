@@ -28,6 +28,22 @@ function isValidPersonnummer(personnummer) {
         return false; // Ogiltigt datum
     }
 
-    // Här kan du lägga till kontrollsifferkontroll om du vill
-    return true; // Om alla kontroller är godkända
+    // Kontrollera kontrollsiffror
+    return isValidControlDigits(personnummer); // Anropa kontrollsifferkontroll
+}
+
+function isValidControlDigits(personnummer) {
+    let sum = 0;
+    for (let i = 0; i < personnummer.length - 1; i++) { // Exkludera sista siffran
+        let digit = parseInt(personnummer[i]);
+        if (i % 2 === 1) { // Dubbel varje andra siffra
+            digit *= 2;
+            if (digit > 9) {
+                digit -= 9; // Subtrahera 9 om resultatet är större än 9
+            }
+        }
+        sum += digit;
+    }
+    // Kontrollera om summan är delbar med 10
+    return (sum + parseInt(personnummer[11])) % 10 === 0; // Inkludera kontrollsiffran
 }
