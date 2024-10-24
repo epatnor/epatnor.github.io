@@ -27,9 +27,20 @@
             let formateratPersonnummer = null;
 
             if (isValid) {
-                // Ta bort allt utom siffror och formatera korrekt
+                // Ta bort allt utom siffror
                 personnummer = personnummer.replace(/\D/g, ''); // Rensa bort icke-siffror
-                formateratPersonnummer = personnummer.slice(0, 8) + "-" + personnummer.slice(8); // Format YYYYMMDD-XXXX
+
+                // Formatera korrekt till YYYYMMDD-XXXX
+                if (personnummer.length === 10) {
+                    // Om det är 10 siffror, lägg till '19' i början (som exempel)
+                    personnummer = "19" + personnummer; 
+                }
+                
+                // Kontrollera nu att personnummer är 12 siffror
+                if (personnummer.length === 12) {
+                    formateratPersonnummer = personnummer.slice(0, 8) + "-" + personnummer.slice(8); // Format YYYYMMDD-XXXX
+                }
+                
                 // Visa det formaterade personnumret på sidan
                 const outputDiv = document.createElement('p');
                 outputDiv.textContent = `Detta personnummer kommer skickas vidare: ${formateratPersonnummer}`;
