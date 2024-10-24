@@ -1,4 +1,4 @@
-A simple site that takes an agrument from the URL. The argument is a sedish personal number, and this site cleans it up (if valid) and changes the output to include a dash before the last 4 digits.
+A simple site that takes an argument from the URL. The argument is a sedish personal number, and this site cleans it up (if valid) and changes the output to include a dash before the last 4 digits.
 
 It includes a GUI that displays a log of all incoming requests, including the original and formatted personnummer, as well as whether they were valid or invalid. This log will update each time a new personnummer is processed.
 
