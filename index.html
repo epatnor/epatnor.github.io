@@ -30,13 +30,14 @@
                 // Ta bort allt utom siffror
                 personnummer = personnummer.replace(/\D/g, ''); // Rensa bort icke-siffror
 
-                // Formatera korrekt till YYYYMMDD-XXXX
+                // Kontrollera längd och format
                 if (personnummer.length === 10) {
-                    // Om det är 10 siffror, lägg till '19' i början (som exempel)
-                    personnummer = "19" + personnummer; 
+                    // 10 siffror: Lägg till 20xx eller 19xx baserat på ålder
+                    const yearPrefix = personnummer.substring(0, 2) < "20" ? "20" : "19"; // Bestäm årtalet
+                    personnummer = yearPrefix + personnummer; // Lägger till 20 eller 19
                 }
                 
-                // Kontrollera nu att personnummer är 12 siffror
+                // Kontrollera att personnumret nu är 12 siffror
                 if (personnummer.length === 12) {
                     formateratPersonnummer = personnummer.slice(0, 8) + "-" + personnummer.slice(8); // Format YYYYMMDD-XXXX
                 }
