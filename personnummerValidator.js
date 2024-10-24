@@ -9,8 +9,14 @@ function formatPersonnummer(personnummer) {
         const prefix = yearPart >= currentYear ? "19" : "20";
         personnummer = prefix + personnummer;
     }
-
-    return personnummer;
+    
+    // Se till att personnumret är formaterat med streck
+    if (personnummer.length === 12) {
+        return personnummer.slice(0, 8) + '-' + personnummer.slice(8);
+    } else {
+        // Om personnumret inte är 12 siffror långt efter formatering, returnera det som det är
+        return personnummer;
+    }
 }
 
 function isValidPersonnummer(personnummer) {
