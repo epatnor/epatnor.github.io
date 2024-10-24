@@ -1,4 +1,13 @@
 /* Reset some default browser styles */
+:root {
+    --main-bg-color: #fff;
+    --second-bg-color: #e0e0e0;
+    --text-color: #333;
+    --success-color: green;
+    --error-color: red;
+    --transition-speed: 0.3s;
+}
+
 body, h1, p {
     margin: 0;
     padding: 0;
@@ -9,28 +18,30 @@ body, h1, p {
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f0f0f0;
-    color: #333;
+    color: var(--text-color);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
 }
 
 /* Main container */
 .container {
-    background-color: #fff;
+    background-color: var(--main-bg-color);
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
     max-width: 400px;
     width: 100%;
     text-align: center;
+    transition: background-color var(--transition-speed) ease;
 }
 
 /* Title styling */
 .title {
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
 }
 
 /* Log styling */
@@ -38,35 +49,42 @@ body {
     margin-top: 20px;
     padding: 10px;
     border-radius: 5px;
-    background-color: #e0e0e0;
+    background-color: var(--second-bg-color);
     max-height: 300px;
     overflow-y: auto;
+    transition: background-color var(--transition-speed) ease;
 }
 
 /* Log message styling */
 .log p {
     margin: 5px 0;
+    font-size: 0.9rem;
 }
 
 /* Success and error messages */
 .log p.success {
-    color: green;
+    color: var(--success-color);
 }
 
 .log p.error {
-    color: red;
+    color: var(--error-color);
 }
 
 /* Dark mode styles */
 body.dark-mode {
     background-color: #181818;
-    color: #f0f0f0;
+    --main-bg-color: #282828;
+    --second-bg-color: #444;
+    --text-color: #f0f0f0;
 }
 
-body.dark-mode .container {
-    background-color: #282828;
+/* Focus styles for better accessibility */
+a:focus, button:focus {
+    outline: 2px solid #005580;
+    outline-offset: 2px;
 }
 
-body.dark-mode .log {
-    background-color: #444;
+/* Smooth transitions for interactive elements */
+button, input, select, textarea {
+    transition: background-color var(--transition-speed) ease, border var(--transition-speed) ease, color var(--transition-speed) ease;
 }
