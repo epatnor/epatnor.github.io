@@ -15,40 +15,51 @@
     </div>
 
     <script src="personnummerValidator.js"></script>
-    <script>
-        // Funktion för att hämta URL-parameter
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
+<script>
+    // Funktion för att hämta URL-parameter
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    // Loggmeddelande
+    function logMessage(message) {
+        const outputDiv = document.getElementById("output");
+        const p = document.createElement("p");
+        p.textContent = message;
+        outputDiv.appendChild(p);
+    }
+
+    // Format personnummer
+    function formatPersonnummer(personnummer) {
+        personnummer = personnummer.replace(/\D/g, '');
+        if (personnummer.length === 10) {
+            const yearPart = parseInt(personnummer.slice(0, 2), 10);
+            const currentYear = new Date().getFullYear() % 100;
+            const prefix = yearPart >= currentYear ? "19" : "20";
+            personnummer = prefix + personnummer;
         }
+        return personnummer;
+    }
 
-        // Loggmeddelande
-        function logMessage(message) {
-            const outputDiv = document.getElementById("output");
-            const p = document.createElement("p");
-            p.textContent = message;
-            outputDiv.appendChild(p);
-        }
+    // Hämta personnummer från URL
+    const personnummer = getQueryParam("personnummer");
 
-        // Hämta personnummer från URL
-        const personnummer = getQueryParam("personnummer");
+    if (!personnummer) {
+        logMessage("Inget personnummer tillhandahölls. Ange ett personnummer för validering.");
+    } else {
+        // Formatera personnumret och kör validering
+        const formateratPersonnummer = formatPersonnummer(personnummer);
+        const isValid = isValidPersonnummer(formateratPersonnummer);
 
-        if (!personnummer) {
-            // Om inget personnummer skickas, skriv ett snällt meddelande
-            logMessage("Inget personnummer tillhandahölls. Ange ett personnummer för validering.");
+        if (isValid) {
+            logMessage(`Framgång: ${personnummer} -> ${formateratPersonnummer}`);
+            logMessage(`Detta personnummer kommer skickas vidare: ${formateratPersonnummer}`);
         } else {
-            // Formatera personnumret och kör validering
-            const formateratPersonnummer = formatPersonnummer(personnummer);
-            const isValid = isValidPersonnummer(formateratPersonnummer);
-
-            if (isValid) {
-                logMessage(`Framgång: ${personnummer} -> ${formateratPersonnummer}`);
-                logMessage(`Detta personnummer kommer skickas vidare: ${formateratPersonnummer}`);
-            } else {
-                logMessage(`Misslyckande: ${personnummer} - Ogiltigt personnummer.`);
-            }
+            logMessage(`Misslyckande: ${personnummer} - Ogiltigt personnummer.`);
         }
-    </script>
+    }
+</script>
     <button id="themeToggle" class="theme-toggle">
     <i id="themeIcon" class="fas fa-moon"></i>
     </button>
