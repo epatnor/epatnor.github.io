@@ -8,6 +8,49 @@
     --transition-speed: 0.3s;
 }
 
+.header {
+    border-top: 3px solid var(--primary-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: var(--background-color);
+}
+
+.logo {
+    width: 100px; /* Justera storleken efter behov */
+    height: auto;
+    transition: opacity 0.3s;
+}
+
+.logo:hover {
+    opacity: 0.7;
+}
+
+.theme-toggle {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+}
+
+#themeIcon.fa-moon {
+    display: none;
+}
+
+body.dark-mode #themeIcon.fa-sun {
+    display: none;
+}
+
+body.dark-mode #themeIcon.fa-moon {
+    display: inline;
+}
 body, h1, p {
     margin: 0;
     padding: 0;
