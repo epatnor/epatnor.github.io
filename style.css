@@ -1,150 +1,71 @@
-/* Reset some default browser styles */
-:root {
-    --main-bg-color: #fff;
-    --second-bg-color: #e0e0e0;
-    --text-color: #333;
-    --success-color: green;
-    --error-color: red;
-    --transition-speed: 0.3s;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .header {
-    border-top: 3px solid var(--primary-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: var(--header-color);
     padding: 10px 20px;
-    background-color: var(--background-color);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .logo {
-    width: 100px; /* Justera storleken efter behov */
-    height: auto;
-    transition: opacity 0.3s;
+    height: 50px; /* Justera efter behov */
+    width: auto;
 }
 
-.logo:hover {
-    opacity: 0.7;
-}
-
-.theme-toggle {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--text-color);
-    transition: transform 0.3s ease, color 0.3s ease;
-}
-
-.theme-toggle:hover {
-    transform: scale(1.1);
-}
-
-#themeIcon.fa-moon {
-    display: none;
-}
-
-body.dark-mode #themeIcon.fa-sun {
-    display: none;
-}
-
-body.dark-mode #themeIcon.fa-moon {
-    display: inline;
-}
-body, h1, p {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Body styling */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f0f0;
-    color: var(--text-color);
+#logo-link, #themeToggle {
     display: flex;
-    justify-content: center;
     align-items: center;
-    height: 100vh;
-    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
 }
 
-/* Main container */
-.container {
-    background-color: var(--main-bg-color);
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-    transition: background-color var(--transition-speed) ease;
-}
-
-/* Title styling */
-.title {
-    font-size: 1.5rem;
-    margin-bottom: 1.25rem;
-}
-
-/* Log styling */
-.log {
-    margin-top: 20px;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: var(--second-bg-color);
-    max-height: 300px;
-    overflow-y: auto;
-    transition: background-color var(--transition-speed) ease;
-}
-
-/* Log message styling */
-.log p {
-    margin: 5px 0;
-    font-size: 0.9rem;
-}
-
-/* Success and error messages */
-.log p.success {
-    color: var(--success-color);
-}
-
-.log p.error {
-    color: var(--error-color);
-}
-
-/* Dark mode styles */
-body.dark-mode {
-    background-color: #181818;
-    --main-bg-color: #282828;
-    --second-bg-color: #444;
-    --text-color: #f0f0f0;
-}
-
-/* Focus styles for better accessibility */
-a:focus, button:focus {
-    outline: 2px solid #005580;
-    outline-offset: 2px;
-}
-
-/* Smooth transitions for interactive elements */
-button, input, select, textarea {
-    transition: background-color var(--transition-speed) ease, border var(--transition-speed) ease, color var(--transition-speed) ease;
-}
-
-.theme-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
+#themeToggle {
     background: none;
     border: none;
-    font-size: 1.5rem;
+    font-size: 24px;
     cursor: pointer;
-    transition: transform 0.3s ease, color 0.3s ease;
     color: var(--text-color);
+    transition: transform 0.2s;
 }
 
-.theme-toggle:hover {
+#themeToggle:hover {
     transform: scale(1.1);
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--header-text-color);
+}
+
+#output {
+    margin: 20px;
+    padding: 20px;
+    background: var(--output-bg-color);
+    border-radius: 8px;
+}
+
+/* Tema-variabler */
+:root {
+    --bg-color: white;
+    --text-color: black;
+    --header-color: #f8f8f8;
+    --header-text-color: #333;
+    --output-bg-color: #fff;
+}
+
+/* Mörkt tema */
+.dark-theme {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --header-color: #2a2a2a;
+    --header-text-color: #e0e0e0;
+    --output-bg-color: #1e1e1e;
 }
