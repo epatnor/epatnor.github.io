@@ -27,8 +27,9 @@
             let formateratPersonnummer = null;
 
             if (isValid) {
-                // Formatera personnumret
-                formateratPersonnummer = personnummer.replace(/\D/g, '').slice(0, 8) + "-" + personnummer.replace(/\D/g, '').slice(8);
+                // Ta bort allt utom siffror och formatera korrekt
+                personnummer = personnummer.replace(/\D/g, ''); // Rensa bort icke-siffror
+                formateratPersonnummer = personnummer.slice(0, 8) + "-" + personnummer.slice(8); // Format YYYYMMDD-XXXX
                 // Visa det formaterade personnumret på sidan
                 const outputDiv = document.createElement('p');
                 outputDiv.textContent = `Detta personnummer kommer skickas vidare: ${formateratPersonnummer}`;
