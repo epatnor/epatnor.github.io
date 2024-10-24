@@ -9,7 +9,7 @@
 <body>
     <header class="header">
         <a href="https://github.com/epatnor/pnrfix" id="logo-link">
-            <img src="pnrfix_logo2.png" alt="pnrfix" id="logoImg" class="logo">
+            <img src="pnrfix_logo2.png" alt="PnrFix Logga" id="logoImg" class="logo">
         </a>
         <button id="themeToggle" class="theme-toggle">
             <i id="themeIcon" class="fas fa-moon"></i>
@@ -17,7 +17,6 @@
     </header>
     
     <div id="output"></div>
-    <div id="statusContainer" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;"></div>
 
     <script src="personnummerValidator.js"></script>
     <script src="themeSwitcher.js"></script>
@@ -32,36 +31,23 @@
             document.getElementById("output").innerHTML += `<p>${message}</p>`;
         }
 
-        // Funktion för att visa status
         function showStatus(message, isError = false) {
-            const statusContainer = document.getElementById('statusContainer');
-            if (statusContainer) {
-                statusContainer.innerHTML = `<p style="background-color: ${isError ? 'red' : 'green'}; color: white; padding: 20px; border-radius: 5px; text-align: center; font-weight: bold; font-size: 1.2em;">${message}</p>`;
-            }
+            const statusMessage = isError ? `<span style="color: red;">FEL</span>` : `<span style="color: green;">OK</span>`;
+            logMessage(message + " " + statusMessage);
         }
 
         function formatAndSendPersonnummer(personnummer) {
-            showStatus(`Inkommande personnummer: ${personnummer}`);
+            logMessage(`Inkommande personnummer: ${personnummer}`);
             
             const isValidLength = personnummer.replace(/-/g, '').length === 10 || personnummer.replace(/-/g, '').length === 12;
-            if (isValidLength) {
-                showStatus("OK", false);
-            } else {
-                showStatus("FEL", true);
-                return;
-            }
-
-            const formattedNumber = personnummer.replace(/-/g, '');
-            const yearPrefix = (formattedNumber.length === 10) ? '20' : '';
-            const finalNumber = yearPrefix + formattedNumber;
+            showStatus("", !isValidLength); // Använd "" som message för att bara visa OK/FEL
             
-            showStatus(`Reformat: ${finalNumber}`);
-            
-            // Kommentar: Här kan du lägga till logik för att skicka numret
-            // sendToURL(finalNumber);
+            if (!isValidLength) return;
 
-            // Om du vill visa att det är skickat:
-            // showStatus("Personnummer skickat!", false);
+            const year = personnummer.slice(0, 2);
+            const century = (year > 24) ? '19' : '20'; // Enkel bestämning av århundrade
+            const formattedNumber = `${century}${personnummer.replace('-', '')}`;
+            logMessage(`Utgående reformaterat personnummer: ${formattedNumber}`);
         }
 
         // Hämta personnummer och formatera/send
