@@ -1,3 +1,4 @@
+// Funktion för att formatera personnummer
 function formatPersonnummer(personnummer) {
     // Ta bort allt utom siffror och bindestreck
     personnummer = personnummer.replace(/[^\d-]/g, '');
@@ -21,9 +22,10 @@ function formatPersonnummer(personnummer) {
     const fullNumber = prefix + normalizedNumber.slice(prefix ? 2 : 0);
 
     // Formatera till önskat format
-    return `${fullNumber.slice(0, 4)}${fullNumber.slice(4, 6)}${fullNumber.slice(6, 8)}-${fullNumber.slice(8)}`;
+    return `${fullNumber.slice(0, 8)}-${fullNumber.slice(8)}`;
 }
 
+// Funktion för att validera personnummer
 function isValidPersonnummer(personnummer) {
     // Ta bort allt utom siffror och bindestreck
     personnummer = personnummer.replace(/[^\d-]/g, '');
@@ -46,7 +48,7 @@ function isValidPersonnummer(personnummer) {
     // Skapa det fullständiga numret för validering
     const fullNumber = prefix + normalizedNumber.slice(prefix ? 2 : 0);
 
-    // Kontrollera att det är 12 siffror
+    // Kontrollera att det är 12 siffror för datumvalidering
     if (fullNumber.length !== 12) {
         return false;
     }
