@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personnummer Konverterare</title>
-    <link rel="stylesheet" href="style.css"> <!-- Om du har en extern CSS-fil -->
+    <link rel="stylesheet" href="style.css"> <!-- Länka till din CSS-fil -->
     <script src="personnummerValidator.js" defer></script> <!-- Ladda den externa JavaScript-filen -->
 </head>
 <body>
-    <h1>Personnummer Konverterare</h1>
-    <div id="log"></div>
+    <div class="container">
+        <h1 class="title">Personnummer Konverterare</h1>
+        <button id="themeToggle">Växla tema</button>
+        <div id="log" class="log"></div>
+    </div>
 
     <script>
         window.onload = function() {
@@ -103,10 +106,14 @@
         function logEntry(original, formatted, success, errorMessage = null) {
             const logDiv = document.getElementById('log');
             const logMessage = success
-                ? `Framgång: ${original} -> ${formatted}`
-                : `Misslyckande: ${original} - ${errorMessage || 'Ogiltigt personnummer'}`;
-            logDiv.innerHTML += `<p>${logMessage}</p>`;
+                ? `<p class="success">Framgång: ${original} -> ${formatted}</p>`
+                : `<p class="error">Misslyckande: ${original} - ${errorMessage || 'Ogiltigt personnummer'}</p>`;
+            logDiv.innerHTML += logMessage;
         }
+
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+        });
     </script>
 </body>
 </html>
