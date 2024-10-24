@@ -1,31 +1,27 @@
 <!DOCTYPE html>
-    <html lang="sv">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Personnummer Validering</title>
-        <link rel="stylesheet" href="style.css"> <!-- Här länkas style.css -->
-    </head>
-    <body>
-        <!-- Din befintliga HTML-kod här -->
-        <header class="header"> <!-- Lägg märke till att jag lagt till klassen 'header' -->
-            <a href="https://github.com/epatnor/pnrfix" id="logo-link">
-                <img src="pnrfix_logo2.png" alt="PnrFix Logga" id="logoImg" class="logo">
-            </a>
-            <button id="themeToggle" class="theme-toggle">
-                <i id="themeIcon" class="fas fa-moon"></i>
-            </button>
-        </header>
-        
-        <div id="output"></div>
-    
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personnummer Validering</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <a href="https://github.com/epatnor/pnrfix" id="logo-link">
+            <img src="pnrfix_logo2.png" alt="pnrfix" id="logoImg" class="logo">
+        </a>
         <button id="themeToggle" class="theme-toggle">
             <i id="themeIcon" class="fas fa-moon"></i>
         </button>
+    </header>
     
-        <script src="personnummerValidator.js"></script>
-        <script src="themeSwitcher.js"></script>
-        <script>
+    <div id="output"></div>
+    <div id="statusContainer" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;"></div>
+
+    <script src="personnummerValidator.js"></script>
+    <script src="themeSwitcher.js"></script>
+    <script>
         // Funktion för att hämta URL-parameter
         function getQueryParam(param) {
             return new URLSearchParams(window.location.search).get(param);
@@ -34,6 +30,38 @@
         // Funktion för att logga meddelanden
         function logMessage(message) {
             document.getElementById("output").innerHTML += `<p>${message}</p>`;
+        }
+
+        // Funktion för att visa status
+        function showStatus(message, isError = false) {
+            const statusContainer = document.getElementById('statusContainer');
+            if (statusContainer) {
+                statusContainer.innerHTML = `<p style="background-color: ${isError ? 'red' : 'green'}; color: white; padding: 20px; border-radius: 5px; text-align: center; font-weight: bold; font-size: 1.2em;">${message}</p>`;
+            }
+        }
+
+        function formatAndSendPersonnummer(personnummer) {
+            showStatus(`Inkommande personnummer: ${personnummer}`);
+            
+            const isValidLength = personnummer.replace(/-/g, '').length === 10 || personnummer.replace(/-/g, '').length === 12;
+            if (isValidLength) {
+                showStatus("OK", false);
+            } else {
+                showStatus("FEL", true);
+                return;
+            }
+
+            const formattedNumber = personnummer.replace(/-/g, '');
+            const yearPrefix = (formattedNumber.length === 10) ? '20' : '';
+            const finalNumber = yearPrefix + formattedNumber;
+            
+            showStatus(`Reformat: ${finalNumber}`);
+            
+            // Kommentar: Här kan du lägga till logik för att skicka numret
+            // sendToURL(finalNumber);
+
+            // Om du vill visa att det är skickat:
+            // showStatus("Personnummer skickat!", false);
         }
 
         // Hämta personnummer och formatera/send
