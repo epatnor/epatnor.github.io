@@ -22,11 +22,9 @@
             }
 
             const originalPersonnummer = personnummer; // Spara för loggning
-            const isValid = isValidPersonnummer(personnummer); // Anropa den separata funktionen
+            const validationResult = validatePersonnummer(personnummer); // Anropa den separata valideringsfunktionen
 
-            let formateratPersonnummer = null;
-
-            if (isValid) {
+            if (validationResult.isValid) {
                 // Ta bort allt utom siffror
                 personnummer = personnummer.replace(/\D/g, ''); // Rensa bort icke-siffror
 
@@ -39,24 +37,52 @@
                 // Kontrollera att personnumret nu är 12 siffror
                 if (personnummer.length === 12) {
                     if (isValidControlDigits(personnummer)) {
-                        formateratPersonnummer = personnummer.slice(0, 8) + "-" + personnummer.slice(8); // Format YYYYMMDD-XXXX
+                        const formateratPersonnummer = personnummer.slice(0, 8) + "-" + personnummer.slice(8); // Format YYYYMMDD-XXXX
+                        
+                        // Visa det formaterade personnumret på sidan
+                        const outputDiv = document.createElement('p');
+                        outputDiv.textContent = `Detta personnummer kommer skickas vidare: ${formateratPersonnummer}`;
+                        document.body.appendChild(outputDiv);
                     } else {
-                        logEntry(originalPersonnummer, null, false);
-                        return;
+                        logEntry(originalPersonnummer, null, false, 'Ogiltiga kontrollsiffror.');
                     }
                 }
-                
-                // Visa det formaterade personnumret på sidan
-                const outputDiv = document.createElement('p');
-                outputDiv.textContent = `Detta personnummer kommer skickas vidare: ${formateratPersonnummer}`;
-                document.body.appendChild(outputDiv);
             } else {
-                logEntry(originalPersonnummer, null, false);
+                logEntry(originalPersonnummer, null, false, validationResult.errorMessage);
             }
 
             // Logga händelsen
-            logEntry(originalPersonnummer, formateratPersonnummer, isValid);
+            logEntry(originalPersonnummer, null, validationResult.isValid);
         };
+
+        function validatePersonnummer(personnummer) {
+            // Ta bort allt utom siffror
+            personnummer = personnummer.replace(/\D/g, ''); // Rensa bort icke-siffror
+            const errorMessage = [];
+
+            // Kontrollera längd
+            if (personnummer.length !== 10 && personnummer.length !== 12) {
+                return { isValid: false, errorMessage: 'Personnumret måste vara 10 eller 12 siffror.' };
+            }
+
+            // Om det är 10 siffror, lägg till årtalsprefix
+            if (personnummer.length === 10) {
+                const yearPrefix = personnummer.substring(0, 2) < "20" ? "20" : "19";
+                personnummer = yearPrefix + personnummer; // Lägger till 20 eller 19
+            }
+
+            // Kontrollera giltigt datum
+            const year = parseInt(personnummer.slice(0, 4), 10);
+            const month = parseInt(personnummer.slice(4, 6), 10);
+            const day = parseInt(personnummer.slice(6, 8), 10);
+
+            const date = new Date(year, month - 1, day); // Skapa datumobjekt
+            if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+                return { isValid: false, errorMessage: 'Ogiltigt datum i personnumret.' };
+            }
+
+            return { isValid: true };
+        }
 
         function isValidControlDigits(personnummer) {
             let sum = 0;
@@ -74,11 +100,11 @@
             return (sum + parseInt(personnummer[11])) % 10 === 0; // Inkludera kontrollsiffran
         }
 
-        function logEntry(original, formatted, success) {
+        function logEntry(original, formatted, success, errorMessage = null) {
             const logDiv = document.getElementById('log');
             const logMessage = success
                 ? `Framgång: ${original} -> ${formatted}`
-                : `Misslyckande: ${original} - Ogiltigt personnummer`;
+                : `Misslyckande: ${original} - ${errorMessage || 'Ogiltigt personnummer'}`;
             logDiv.innerHTML += `<p>${logMessage}</p>`;
         }
     </script>
