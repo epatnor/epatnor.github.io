@@ -38,23 +38,35 @@
         }
 
         function formatAndSendPersonnummer(personnummer) {
-            const isValidLength = personnummer.replace(/-/g, '').length === 10 || personnummer.replace(/-/g, '').length === 12;
-            const statusText = isValidLength ? 'OK' : 'FEL';
-            const statusColor = isValidLength ? 'green' : 'red';
+            // Tar bort eventuella bindestreck för enklare bearbetning
+            const cleanNumber = personnummer.replace(/-/g, '');
+            
+            // Extrahera århundrade, år, månad och dag
+            const centuryYear = cleanNumber.slice(0, 2);
+            const month = parseInt(cleanNumber.slice(2, 4), 10);
+            const day = parseInt(cleanNumber.slice(4, 6), 10);
+        
+            // Validering av århundrade, månad och dag
+            const isValidCentury = centuryYear === '19' || centuryYear === '20';
+            const isValidMonth = month > 0 && month <= 12;
+            const isValidDay = day > 0 && day <= 31;
+        
+            const isValidLength = cleanNumber.length === 10 || cleanNumber.length === 12;
+            const isPersonnummerValid = isValidCentury && isValidMonth && isValidDay && isValidLength;
+            const statusText = isPersonnummerValid ? 'OK' : 'FEL';
+            const statusColor = isPersonnummerValid ? 'green' : 'red';
             
             logMessage(`Inkommande personnummer: ${personnummer} <span style="color: ${statusColor};">${statusText}</span>`);
         
-            if (!isValidLength) return;
+            if (!isPersonnummerValid) return;
         
-            const cleanNumber = personnummer.replace(/-/g, ''); // Tar bort eventuella bindestreck
-            const year = cleanNumber.slice(0, 2);
-            const century = (year > 24) ? '19' : '20'; // Enkel bestämning av århundrade
-            const formattedNumber = `${century}${cleanNumber.slice(0, -4)}-${cleanNumber.slice(-4)}`;
+            const formattedNumber = `${centuryYear === '20' || centuryYear > 24 ? '20' : '19'}${cleanNumber.slice(2)}`;
+            const formattedNumberWithDash = `${formattedNumber.slice(0, 8)}-${formattedNumber.slice(8)}`;
         
-            logMessage(`Utgående reformaterat personnummer: ${formattedNumber}`);
+            logMessage(`Utgående reformaterat personnummer: ${formattedNumberWithDash}`);
             
-            // Förberedelse för att skicka formattedNumber
-            // sendToURL(formattedNumber); // Kommenterar detta för att visa var du skulle skicka numret
+            // Skicka formattedNumberWithDash till din URL om så önskas
+            // sendToURL(formattedNumberWithDash);
         }
 
         // Hämta personnummer och formatera/send
