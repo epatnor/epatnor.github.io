@@ -38,13 +38,14 @@
         }
 
         function formatAndSendPersonnummer(personnummer) {
-            logMessage(`Inkommande personnummer: ${personnummer}`);
-            
             const isValidLength = personnummer.replace(/-/g, '').length === 10 || personnummer.replace(/-/g, '').length === 12;
-            showStatus("", !isValidLength); // Använd "" som message för att bara visa OK/FEL
+            const statusText = isValidLength ? 'OK' : 'FEL';
+            const statusColor = isValidLength ? 'green' : 'red';
             
+            logMessage(`Inkommande personnummer: ${personnummer} <span style="color: ${statusColor};">${statusText}</span>`);
+        
             if (!isValidLength) return;
-
+        
             const year = personnummer.slice(0, 2);
             const century = (year > 24) ? '19' : '20'; // Enkel bestämning av århundrade
             const formattedNumber = `${century}${personnummer.replace('-', '')}`;
