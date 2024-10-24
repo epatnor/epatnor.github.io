@@ -82,9 +82,10 @@
             logEntry(originalPersonnummer, formateratPersonnummer, isValid);
 
             if (isValid) {
-                // Skicka vidare det formaterade personnumret till en annan webbadress
-                let targetUrl = "https://epatnor.github.io/mottagare";  // Din nya måladress
-                window.location.href = `${targetUrl}?personnummer=${formateratPersonnummer}`;
+                // Visa det formaterade personnumret på sidan istället för att skicka det
+                const outputDiv = document.createElement('p');
+                outputDiv.textContent = `Detta personnummer kommer skickas vidare: ${formateratPersonnummer}`;
+                document.body.appendChild(outputDiv);
             }
         };
     </script>
