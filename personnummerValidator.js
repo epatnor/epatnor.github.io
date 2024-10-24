@@ -70,5 +70,6 @@ function isValidPersonnummer(personnummer) {
     return true; // Om inga tidigare kontroller misslyckades
 }
 
-// Exportera funktionerna
-module.exports = { formatPersonnummer, isValidPersonnummer };
+// Gör funktionerna globala
+window.formatPersonnummer = formatPersonnummer;
+window.isValidPersonnummer = isValidPersonnummer;
